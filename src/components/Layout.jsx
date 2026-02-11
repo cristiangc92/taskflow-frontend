@@ -1,19 +1,15 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import "../styles/layout.css"
-import { useState } from "react";
+import "../styles/layout.css";
+import { useAuth } from "../context/AuthContext";
 
 function Layout() {
-    const navigate = useNavigate()
-    const [isAuthenticated, setIsAuthenticated] = useState(
-        !!localStorage.getItem("token")
-    )
-        
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem("token")
-        setIsAuthenticated(false)
-        navigate("/")
-    }
+        logout();
+        navigate("/");
+    };
 
     return (
         <>
@@ -38,7 +34,10 @@ function Layout() {
                                 <Link className="nav-link d-inline" to="/dashboard">
                                     Dashboard
                                 </Link>
-                                <button className="btn btn-sm btn-outline-light ms-2" onClick={handleLogout}>
+                                <button
+                                    className="btn btn-sm btn-outline-light ms-2"
+                                    onClick={handleLogout}
+                                >
                                     Cerrar sesión
                                 </button>
                             </>
@@ -51,7 +50,7 @@ function Layout() {
                 <Outlet />
             </div>
         </>
-    )
+    );
 }
 
 export default Layout;

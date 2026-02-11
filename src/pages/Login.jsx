@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginUser } from "../services/AuthService"
+import { useAuth } from "../context/AuthContext"
 
 function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const [form, setForm] = useState({
     email: "",
@@ -26,7 +28,7 @@ function Login() {
     try {
       const data = await loginUser(form)
 
-      localStorage.setItem("token", data.token)
+      login(data.token)
 
       navigate("/dashboard")
     } catch (err) {
