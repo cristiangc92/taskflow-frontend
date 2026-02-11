@@ -1,8 +1,8 @@
+import AppRouter from "./routes/AppRouter"
+
 function App() {
   return (
-    <>
-      <h1>Taskflow Frontend</h1>
-    </>
+    <AppRouter />
   )
 }
 
