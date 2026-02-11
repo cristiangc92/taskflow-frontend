@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getProject } from "../services/projectService"
+import { getProjects } from "../services/projectService"
 
 function Dashboard() {
   const [projects, setProjects] = useState([])
@@ -9,7 +9,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const data = await getProject()
+        const data = await getProjects()
         setProjects(data)
       } catch (err) {
         setError(err.message)
