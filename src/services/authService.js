@@ -1,19 +1,12 @@
-const AUTH_URL = "https://taskflow-api-pztk.onrender.com/api"
+import API from "../api/axios";
 
 export const loginUser = async (data) => {
-    const response = await fetch(`${AUTH_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-
-    const result = await response.json()
-
-    if(!response.ok){
-        throw new Error(result.error || "Error al iniciar sesion")
-    }
-
-    return result
-}
+  try {
+    const response = await API.post("/auth/login", data);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error || "Error al iniciar sesión"
+    );
+  }
+};
