@@ -1,0 +1,17 @@
+.navbar-custom {
+  background-color: #111;
+}
+
+.navbar-custom .nav-link {
+  color: white;
+  font-weight: 500;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #0d6efd;
+}
+
+.main-container {
+  min-height: 90vh;
+  padding-top: 2rem;
+}
