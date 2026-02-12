@@ -19,3 +19,14 @@ export const createProject = async (data) =>{
         )
     }
 }
+
+export const deleteProject = async (id) => {
+    try {
+        const response = await API.delete(`/projects/${id}`)
+        return response.data
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.error || "Error al eliminar proyecto"
+        )
+    }
+}

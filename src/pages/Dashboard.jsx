@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getProjects, createProject } from "../services/projectService"
+import { getProjects, createProject, deleteProject } from "../services/projectService"
 
 function Dashboard() {
   const [projects, setProjects] = useState([])
@@ -53,6 +53,19 @@ function Dashboard() {
       setError(err.message)
     } finally {
       setCreating(false)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if(!window.confirm("¿Eliminar este proyecto?")) return
+
+    try {
+      await deleteProject(id)
+
+      // Actualizamos estado sin recargar
+      setProjects(projects.filter(p => p.id !== id))
+    } catch (err) {
+      alert(err.message)
     }
   }
 
@@ -115,9 +128,15 @@ function Dashboard() {
       ) : (
         <ul className="list-group">
           {projects.map((project) => (
-            <li key={project.id} className="list-group-item">
-              <strong>{project.name}</strong>
-              <p className="mb-0">{project.description}</p>
+            <li key={project.id} className="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{project.name}</strong>
+                <p className="mb-0">{project.description}</p>
+              </div>
+
+              <button className="btn btn-sm btn-danger">
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>
