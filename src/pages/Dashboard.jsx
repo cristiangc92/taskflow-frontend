@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { getProjects, createProject, deleteProject } from "../services/projectService"
+import ProjectItem from "../components/ProjectItem"
 
 function Dashboard() {
   const [projects, setProjects] = useState([])
@@ -57,7 +58,7 @@ function Dashboard() {
   }
 
   const handleDelete = async (id) => {
-    if(!window.confirm("¿Eliminar este proyecto?")) return
+    if (!window.confirm("¿Eliminar este proyecto?")) return
 
     try {
       await deleteProject(id)
@@ -126,20 +127,17 @@ function Dashboard() {
       {projects.length === 0 ? (
         <p>No tienes proyectos aún.</p>
       ) : (
-        <ul className="list-group">
-          {projects.map((project) => (
-            <li key={project.id} className="list-group-item d-flex justify-content-between align-items-start">
-              <div>
-                <strong>{project.name}</strong>
-                <p className="mb-0">{project.description}</p>
-              </div>
-
-              <button className="btn btn-sm btn-danger" onClick={() => handleDelete(project.id)}>
-                Eliminar
-              </button>
-            </li>
-          ))}
-        </ul>
+        <>
+          {
+            projects.map((project) => (
+              <ProjectItem
+                key={project.id}
+                project={project}
+                onDelete={handleDelete}
+              />
+            ))
+          }
+        </>
       )}
     </div>
   )
