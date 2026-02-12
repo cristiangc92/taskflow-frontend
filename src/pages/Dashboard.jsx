@@ -134,7 +134,7 @@ function Dashboard() {
                 <p className="mb-0">{project.description}</p>
               </div>
 
-              <button className="btn btn-sm btn-danger">
+              <button className="btn btn-sm btn-danger" onClick={() => handleDelete(project.id)}>
                 Eliminar
               </button>
             </li>
