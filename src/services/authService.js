@@ -1,5 +1,16 @@
 import API from "../api/axios";
 
+export const registerUser = async (data) => {
+  try {
+    const response = await API.post("/auth/register", data);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error || "Error al registrar usuario"
+    );
+  }
+};
+
 export const loginUser = async (data) => {
   try {
     const response = await API.post("/auth/login", data);
