@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { setLogoutHandler } from "./authManager";
 
 const AuthContext = createContext();
 
@@ -16,6 +17,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setToken(null);
   };
+
+  setLogoutHandler(logout);
 
   const isAuthenticated = !!token;
 

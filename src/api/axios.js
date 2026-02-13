@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logoutFromInterceptor } from "../context/authManager";
 
 const API = axios.create({
   baseURL: "https://taskflow-api-pztk.onrender.com/api",
@@ -20,11 +21,7 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Limpiar token
-      localStorage.removeItem("token");
-
-      // Redirigir al login
-      window.location.href = "/";
+      logoutFromInterceptor();
     }
 
     return Promise.reject(error);
