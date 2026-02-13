@@ -15,4 +15,20 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Interceptor de response (manejar 401)
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Limpiar token
+      localStorage.removeItem("token");
+
+      // Redirigir al login
+      window.location.href = "/";
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default API;
