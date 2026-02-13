@@ -74,9 +74,6 @@ function ProjectItem({ project, onDelete }) {
     return (
         <div className="card mb-4">
             <div className="card-body">
-                <h5>{project.name}</h5>
-                <p>{project.description}</p>
-
                 <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h5>{project.name}</h5>
