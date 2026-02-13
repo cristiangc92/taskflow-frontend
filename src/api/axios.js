@@ -2,7 +2,7 @@ import axios from "axios";
 import { logoutFromInterceptor } from "../context/authManager";
 
 const API = axios.create({
-  baseURL: "https://taskflow-api-pztk.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Interceptor para enviar token automáticamente
