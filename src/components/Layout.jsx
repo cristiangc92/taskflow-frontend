@@ -3,13 +3,15 @@ import "../styles/layout.css";
 import { useAuth } from "../context/AuthContext";
 
 function Layout() {
-    const { isAuthenticated, logout } = useAuth();
+    const { user, logout, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
 
     const handleLogout = () => {
         logout();
         navigate("/");
     };
+
 
     return (
         <>
@@ -21,26 +23,31 @@ function Layout() {
 
                     <div>
                         {!isAuthenticated ? (
-                            <>
+                            <div className="d-flex align-items-center gap-3 text-white">
                                 <Link className="nav-link d-inline" to="/">
                                     Login
                                 </Link>
                                 <Link className="nav-link d-inline" to="/register">
                                     Register
                                 </Link>
-                            </>
+                            </div>
                         ) : (
-                            <>
-                                <Link className="nav-link d-inline" to="/dashboard">
+                            <div className="d-flex align-items-center gap-3 text-white">
+                                <span>
+                                    Bienvenido, {user?.email}
+                                </span>
+
+                                <Link className="nav-link d-inline text-white" to="/dashboard">
                                     Dashboard
                                 </Link>
+
                                 <button
-                                    className="btn btn-sm btn-outline-light ms-2"
+                                    className="btn btn-sm btn-outline-light"
                                     onClick={handleLogout}
                                 >
                                     Cerrar sesión
                                 </button>
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>
