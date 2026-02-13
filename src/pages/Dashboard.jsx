@@ -13,6 +13,8 @@ function Dashboard() {
   })
 
   const [creating, setCreating] = useState(false)
+  const [deletingId, setDeletingId] = useState(null)
+
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -61,12 +63,16 @@ function Dashboard() {
     if (!window.confirm("¿Eliminar este proyecto?")) return
 
     try {
+      setDeletingId(id)
       await deleteProject(id)
 
       // Actualizamos estado sin recargar
       setProjects(projects.filter(p => p.id !== id))
     } catch (err) {
       alert(err.message)
+    }
+    finally{
+      setDeletingId(null)
     }
   }
 
@@ -134,6 +140,7 @@ function Dashboard() {
                 key={project.id}
                 project={project}
                 onDelete={handleDelete}
+                deletingId={deletingId}
               />
             ))
           }

@@ -6,10 +6,12 @@ import {
     deleteTask
 } from "../services/taskService";
 
-function ProjectItem({ project, onDelete }) {
+function ProjectItem({ project, onDelete, deletingId }) {
     const [tasks, setTasks] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [updatingTaskId, setUpdatingTaskId] = useState(null)
+    const [creatingTask, setCreatingTask] = useState(false)
 
     // Obtener tareas
     useEffect(() => {
@@ -27,30 +29,34 @@ function ProjectItem({ project, onDelete }) {
 
     // Crear tarea
     const handleCreateTask = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        if (!title.trim()) {
-            alert("El título es obligatorio");
-            return;
-        }
+        if (!title.trim()) return
 
         try {
+            setCreatingTask(true)
+
             const newTask = await createTask(project.id, {
                 title,
                 description
-            });
+            })
 
-            setTasks([newTask, ...tasks]);
-            setTitle("");
-            setDescription("");
+            setTasks([newTask, ...tasks])
+            setTitle("")
+            setDescription("")
         } catch (error) {
-            alert(error.message);
+            alert(error.message)
+        } finally {
+            setCreatingTask(false)
         }
-    };
+    }
+
 
     // Cambiar estado
     const handleStatusChange = async (taskId, newStatus) => {
         try {
+            setUpdatingTaskId(taskId)
+
             const updated = await updateTaskStatus(taskId, newStatus);
 
             setTasks(tasks.map(t =>
@@ -58,6 +64,8 @@ function ProjectItem({ project, onDelete }) {
             ));
         } catch (error) {
             alert(error.message);
+        } finally {
+            setUpdatingTaskId(null)
         }
     };
 
@@ -83,8 +91,9 @@ function ProjectItem({ project, onDelete }) {
                     <button
                         className="btn btn-sm btn-danger"
                         onClick={() => onDelete(project.id)}
+                        disabled={deletingId === project.id}
                     >
-                        Eliminar proyecto
+                        {deletingId === project.id ? "Eliminando..." : "Eliminar proyecto"}
                     </button>
                 </div>
 
@@ -102,38 +111,68 @@ function ProjectItem({ project, onDelete }) {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <button className="btn btn-sm btn-dark">
-                        Agregar tarea
+                    <button
+                        className="btn btn-sm btn-dark"
+                        disabled={creatingTask}
+                    >
+                        {creatingTask ? "Agregando..." : "Agregar tarea"}
                     </button>
+
                 </form>
 
                 {/* Lista tareas */}
                 <ul className="list-group">
                     {tasks.map(task => (
-                        <li key={task.id} className="list-group-item">
-                            <strong>{task.title}</strong>
-                            <p className="mb-1">{task.description}</p>
+                        <li
+                            key={task.id}
+                            className={`list-group-item ${task.status === "done"
+                                ? "list-group-item-success"
+                                : task.status === "doing"
+                                    ? "list-group-item-warning"
+                                    : ""
+                                }`}
+                        >
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{task.title}</strong>
+                                    <p className="mb-1">{task.description}</p>
+                                </div>
+
+                                <span
+                                    className={`badge ${task.status === "todo"
+                                        ? "bg-secondary"
+                                        : task.status === "doing"
+                                            ? "bg-warning text-dark"
+                                            : "bg-success"
+                                        }`}
+                                >
+                                    {task.status.toUpperCase()}
+                                </span>
+                            </div>
 
                             <div className="d-flex gap-2">
                                 <button
                                     className="btn btn-sm btn-secondary"
+                                    disabled={task.status === "todo" || updatingTaskId === task.id}
                                     onClick={() => handleStatusChange(task.id, "todo")}
                                 >
-                                    ToDo
+                                    {updatingTaskId === task.id ? "..." : "ToDo"}
                                 </button>
 
                                 <button
                                     className="btn btn-sm btn-warning"
+                                    disabled={task.status === "doing" || updatingTaskId === task.id}
                                     onClick={() => handleStatusChange(task.id, "doing")}
                                 >
-                                    Doing
+                                    {updatingTaskId === task.id ? "..." : "Doing"}
                                 </button>
 
                                 <button
                                     className="btn btn-sm btn-success"
+                                    disabled={task.status === "done" || updatingTaskId === task.id}
                                     onClick={() => handleStatusChange(task.id, "done")}
                                 >
-                                    Done
+                                    {updatingTaskId === task.id ? "..." : "Done"}
                                 </button>
 
                                 <button
