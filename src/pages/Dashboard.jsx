@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getProjects, createProject, deleteProject } from "../services/projectService"
 import ProjectItem from "../components/ProjectItem"
+import { toast } from "react-toastify";
 
 function Dashboard() {
   const [projects, setProjects] = useState([])
@@ -49,11 +50,14 @@ function Dashboard() {
       // Agregamos el nuevo proyecto al estado sin recargar
       setProjects([created, ...projects])
 
+      toast.success("Proyecto creado correctamente");
+
       // Limpiar formulario
       setNewProject({ name: "", description: "" })
 
     } catch (err) {
-      setError(err.message)
+      // setError(err.message)
+      toast.error(err.message || "Error al crear el proyecto");
     } finally {
       setCreating(false)
     }
@@ -68,8 +72,10 @@ function Dashboard() {
 
       // Actualizamos estado sin recargar
       setProjects(projects.filter(p => p.id !== id))
+      toast.success("Proyecto eliminado");
     } catch (err) {
       alert(err.message)
+      toast.error("Error al eliminar el proyecto");
     }
     finally{
       setDeletingId(null)

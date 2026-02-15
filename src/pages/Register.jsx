@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
+import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
@@ -45,11 +46,14 @@ function Register() {
         password: form.password
       });
 
+      toast.success("Usuario registrado correctamente");
+
       // Redirigir al login
       navigate("/");
 
     } catch (err) {
-      setError(err.message);
+      // setError(err.message);
+      toast.error(err.message || "Error al registrar usuario");
     } finally {
       setLoading(false);
     }

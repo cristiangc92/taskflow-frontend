@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginUser } from "../services/authService"
 import { useAuth } from "../context/AuthContext"
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate()
@@ -27,12 +28,12 @@ function Login() {
 
     try {
       const data = await loginUser(form)
-
       login(data.token)
-
+      toast.success("Login exitoso");
       navigate("/dashboard")
     } catch (err) {
-      setError(err.message)
+      // setError(err.message)
+      toast.error(err.message || "Error al iniciar sesión");
     }
   }
 

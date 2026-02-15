@@ -1,6 +1,7 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import "../styles/layout.css";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Layout() {
     const { user, logout, isAuthenticated } = useAuth();
@@ -9,6 +10,7 @@ function Layout() {
 
     const handleLogout = () => {
         logout();
+        toast.info("Sesión cerrada");
         navigate("/");
     };
 

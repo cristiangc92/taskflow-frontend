@@ -5,6 +5,7 @@ import {
     updateTaskStatus,
     deleteTask
 } from "../services/taskService";
+import { toast } from "react-toastify";
 
 function ProjectItem({ project, onDelete, deletingId }) {
     const [tasks, setTasks] = useState([]);
@@ -42,6 +43,7 @@ function ProjectItem({ project, onDelete, deletingId }) {
             })
 
             setTasks([newTask, ...tasks])
+            toast.success("Tarea creada correctamente");
             setTitle("")
             setDescription("")
         } catch (error) {
@@ -62,6 +64,7 @@ function ProjectItem({ project, onDelete, deletingId }) {
             setTasks(tasks.map(t =>
                 t.id === taskId ? updated : t
             ));
+            toast.success("Estado actualizado");
         } catch (error) {
             alert(error.message);
         } finally {
@@ -74,6 +77,7 @@ function ProjectItem({ project, onDelete, deletingId }) {
         try {
             await deleteTask(taskId);
             setTasks(tasks.filter(t => t.id !== taskId));
+            toast.success("Tarea eliminada");
         } catch (error) {
             alert(error.message);
         }
