@@ -14,6 +14,7 @@ function Login() {
   })
 
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -25,6 +26,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
+    setLoading(true);
 
     try {
       const data = await loginUser(form)
@@ -33,7 +35,9 @@ function Login() {
       navigate("/dashboard")
     } catch (err) {
       // setError(err.message)
-      toast.error(err.message || "Error al iniciar sesión");
+      toast.error(err.response?.data?.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -61,7 +65,20 @@ function Login() {
                 <input type="password" name="password" className="form-control" value={form.password} onChange={handleChange} required />
               </div>
 
-              <button className="btn btn-dark w-100">Ingresar</button>
+              <button
+                type="submit"
+                className="btn btn-dark w-100"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Ingresando...
+                  </>
+                ) : (
+                  "Ingresar"
+                )}
+              </button>
             </form>
           </div>
         </div>
